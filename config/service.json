@@ -1,0 +1,5 @@
+{
+  "serviceId": "lumendesk-synthetic-support",
+  "strategy": "full",
+  "promotion": "Requires a separately reviewed change. Evaluation never changes this file."
+}

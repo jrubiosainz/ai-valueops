@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "serviceId": "lumendesk-synthetic-support",
+  "datasetVersion": "2026-09-21.v1",
+  "model": "gpt-4.1-mini",
+  "modelVersion": "2025-04-14",
+  "modelSku": "GlobalStandard",
+  "apiVersion": "2024-10-21",
+  "deploymentName": "valueops-qa",
+  "repetitions": 2,
+  "maxRequests": 48,
+  "maxTotalTokens": 160000,
+  "maxWallTimeMs": 900000,
+  "requestTimeoutMs": 45000,
+  "requestIntervalMs": 15000,
+  "maxOutputTokens": 240,
+  "maxPromptCharacters": 24000,
+  "mandatoryDocumentIds": ["POLICY-001"],
+  "selectedDocumentCount": 1,
+  "thresholds": {
+    "minimumQualityRate": 1,
+    "minimumPolicyRate": 1,
+    "minimumAttributionCoverage": 1,
+    "maximumP95LatencyMs": 12000,
+    "minimumEstimatedCostReductionPct": 5,
+    "maximumPriceAgeDays": 7
+  }
+}
