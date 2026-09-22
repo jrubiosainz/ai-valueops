@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "kind": "estimated",
+  "currency": "USD",
+  "model": "gpt-4.1-mini",
+  "modelVersion": "2025-04-14",
+  "sku": "GlobalStandard",
+  "accountRegion": "westeurope",
+  "sourceUrl": "https://prices.azure.com/api/retail/prices",
+  "sourceQuery": "armRegionName eq 'westeurope' and productName eq 'Azure OpenAI' and (meterName eq 'gpt 4.1 mini Inp glbl Tokens' or meterName eq 'gpt 4.1 mini cached Inp glbl Tokens' or meterName eq 'gpt 4.1 mini Outp glbl Tokens')",
+  "retrievedAt": "2026-09-21T16:05:23.818Z",
+  "ratesPerMillion": {
+    "input": 0.4,
+    "cachedInput": 0.1,
+    "output": 1.6
+  },
+  "records": {
+    "input": {
+      "meterName": "gpt 4.1 mini Inp glbl Tokens",
+      "meterId": "81eb993a-0f50-54c7-895c-606aa736f603",
+      "skuName": "gpt 4.1 mini Inp glbl",
+      "productName": "Azure OpenAI",
+      "armRegionName": "westeurope",
+      "retailPrice": 0.0004,
+      "unitOfMeasure": "1K",
+      "currencyCode": "USD",
+      "effectiveStartDate": "2025-04-01T00:00:00Z"
+    },
+    "cachedInput": {
+      "meterName": "gpt 4.1 mini cached Inp glbl Tokens",
+      "meterId": "ab6ea520-9be1-5657-b89e-93eaf579095d",
+      "skuName": "gpt 4.1 mini cached Inp glbl",
+      "productName": "Azure OpenAI",
+      "armRegionName": "westeurope",
+      "retailPrice": 0.0001,
+      "unitOfMeasure": "1K",
+      "currencyCode": "USD",
+      "effectiveStartDate": "2025-04-01T00:00:00Z"
+    },
+    "output": {
+      "meterName": "gpt 4.1 mini Outp glbl Tokens",
+      "meterId": "14536a0c-e1bc-5108-b751-e1fd1cdc06ad",
+      "skuName": "gpt 4.1 mini Outp glbl",
+      "productName": "Azure OpenAI",
+      "armRegionName": "westeurope",
+      "retailPrice": 0.0016,
+      "unitOfMeasure": "1K",
+      "currencyCode": "USD",
+      "effectiveStartDate": "2025-04-01T00:00:00Z"
+    }
+  },
+  "method": "(uncached input tokens * input rate + cached input tokens * cached rate + output tokens * output rate) / 1,000,000.",
+  "exclusions": "List-price estimate only. No invoices, negotiated discounts, taxes, credits, storage, network or other resource charges."
+}

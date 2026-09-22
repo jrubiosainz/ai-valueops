@@ -1,0 +1,21 @@
+{
+  "name": "ai-valueops",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Evaluate AI cost optimizations against quality and policy gates before a human approves a change.",
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "demo": "node scripts/build.mjs && node src/server.mjs",
+    "start": "node src/server.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/*.test.mjs",
+    "evaluate": "node scripts/evaluate.mjs",
+    "evaluate:fixture": "node scripts/evaluate.mjs --fixture",
+    "pricing": "node scripts/pricing.mjs",
+    "deploy": "node scripts/deploy.mjs",
+    "context": "node src/context-server.mjs"
+  }
+}

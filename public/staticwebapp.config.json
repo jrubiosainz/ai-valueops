@@ -1,0 +1,20 @@
+{
+  "globalHeaders": {
+    "Cache-Control": "no-store",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "no-referrer",
+    "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'"
+  },
+  "mimeTypes": {
+    ".mjs": "text/javascript",
+    ".json": "application/json",
+    ".patch": "text/plain"
+  },
+  "routes": [
+    {
+      "route": "/*",
+      "methods": ["POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+      "statusCode": 405
+    }
+  ]
+}

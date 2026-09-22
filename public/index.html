@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Evaluate AI cost optimizations against quality and policy gates before a human approves a change.">
+  <title>AI ValueOps | Policy-gated optimization</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <aside class="sidebar" aria-label="Workspace navigation">
+    <a class="brand" href="#overview" aria-label="AI ValueOps overview">
+      <span class="brand-mark" aria-hidden="true">V</span>
+      <span>AI ValueOps<small>Optimize with evidence</small></span>
+    </a>
+    <div class="nav-label">EVALUATION WORKSPACE</div>
+    <nav>
+      <a href="#overview" data-nav="overview"><span class="nav-icon" aria-hidden="true">01</span>Comparison</a>
+      <a href="#policy" data-nav="policy"><span class="nav-icon" aria-hidden="true">02</span>Policy &amp; human gate</a>
+      <a href="#answers" data-nav="answers"><span class="nav-icon" aria-hidden="true">03</span>Case explorer</a>
+      <a href="#method" data-nav="method"><span class="nav-icon" aria-hidden="true">04</span>Method &amp; sources</a>
+    </nav>
+    <div class="sidebar-note">
+      <span class="status-dot" aria-hidden="true"></span><strong>Read-only by design</strong>
+      <p>No model calls.<br>No automatic changes.<br>Human review stays separate.</p>
+      <a href="https://github.com/jrubiosainz/ai-valueops">Repository &amp; quickstart <span aria-hidden="true">&nearr;</span></a>
+    </div>
+  </aside>
+  <main id="main">
+    <header class="workspace-bar">
+      <div><span class="workspace-label">SYNTHETIC WORKLOAD</span><strong>LumenDesk support</strong></div>
+      <span class="chip neutral">Read-only viewer</span>
+    </header>
+    <div id="loading" class="loading" role="status">Loading the included report...</div>
+    <div id="load-error" class="load-error" role="alert" hidden></div>
+    <noscript><p class="load-error">JavaScript is required to explore this local report. The JSON files remain available in the repository.</p></noscript>
+    <div id="workspace" hidden>
+      <div class="recording-strip">
+        <div><span class="recording-mark" aria-hidden="true"></span><strong id="mode-label"></strong><span id="recording-detail"></span></div>
+        <a href="./evidence.json" download="ai-valueops-report.json">Download report <span aria-hidden="true">&darr;</span></a>
+      </div>
+
+      <section id="overview" data-panel="overview" aria-labelledby="overview-title" tabindex="-1">
+        <div class="page-heading">
+          <div><p class="eyebrow">COST OPTIMIZATION / CONTEXT SELECTION</p><h1 id="overview-title">Make the trade-off visible.</h1>
+            <p class="lead">Less context is useful only when the answers and the guardrails hold.</p></div>
+          <a class="button secondary" href="#policy">Inspect the human gate <span aria-hidden="true">&rarr;</span></a>
+        </div>
+        <div class="metrics-grid" aria-label="Selected context compared with baseline">
+          <article class="metric"><span class="metric-label">Input tokens</span><strong id="token-reduction"></strong><span id="token-comparison"></span><small>Measured usage in the recorded example</small></article>
+          <article class="metric"><span class="metric-label">Estimated token cost</span><strong id="cost-reduction"></strong><span id="cost-comparison"></span><small>Cached-token-aware list prices, not a bill</small></article>
+          <article class="metric"><span class="metric-label">Quality &amp; mandatory policy</span><strong id="quality-result"></strong><span id="quality-comparison"></span><small>Deterministic acceptance checks</small></article>
+          <article class="metric caution"><span class="metric-label">Median latency</span><strong id="median-result"></strong><span id="median-comparison"></span><small id="median-note"></small></article>
+        </div>
+        <article class="card comparison-card">
+          <div class="card-heading">
+            <div><h2>Three strategies. One acceptance contract.</h2><p>Compare the full context, a policy-preserving candidate, and a deliberately unsafe negative control.</p></div>
+            <span class="chip neutral" id="matrix-size"></span>
+          </div>
+          <div class="table-scroll">
+            <table id="comparison-table">
+              <caption class="visually-hidden">Observed results for each context strategy</caption>
+              <thead><tr><th scope="col">Strategy</th><th scope="col">Input tokens</th><th scope="col">Estimated cost</th><th scope="col">Quality</th><th scope="col">Policy</th><th scope="col">p50 / p95</th><th scope="col">Gate result</th></tr></thead>
+              <tbody id="comparison-rows"></tbody>
+            </table>
+          </div>
+          <div class="table-note"><span class="note-marker" aria-hidden="true">i</span><p id="cache-note"></p></div>
+        </article>
+        <div class="overview-bottom">
+          <article class="outcome-card"><div class="outcome-icon" aria-hidden="true">&rarr;</div><div><h2 id="outcome-title"></h2><p id="outcome-detail"></p></div><a href="#policy">Review the boundary <span aria-hidden="true">&rarr;</span></a></article>
+          <p class="scope-note"><strong>Useful evidence, bounded scope.</strong> Eight synthetic English cases, two repetitions, one model. Not an independent holdout or a general quality guarantee. Median latency can get worse even when estimated cost falls.</p>
+        </div>
+      </section>
+
+      <section id="policy" data-panel="policy" aria-labelledby="policy-title" tabindex="-1" hidden>
+        <div class="page-heading"><div><p class="eyebrow">POLICY COVERAGE / HUMAN CONTROL</p><h1 id="policy-title">Cheaper is not enough.</h1>
+          <p class="lead">An optimization must preserve mandatory context. A passing candidate still cannot approve itself.</p></div></div>
+        <div class="policy-grid">
+          <article class="card negative-card">
+            <div class="card-heading"><div><p class="eyebrow">NEGATIVE CONTROL</p><h2>Policy removed. Candidate blocked.</h2></div><span class="chip fail">Rejected</span></div>
+            <p class="card-intro">The aggressive strategy retrieves one document but drops <code>POLICY-001</code>. Lower estimated cost does not override a failed policy check.</p>
+            <div class="negative-metrics">
+              <div><span>Mandatory policy</span><strong id="negative-policy"></strong><small>Required in every context</small></div>
+              <div><span>Quality checks</span><strong id="negative-quality"></strong><small>Facts, disposition, citations</small></div>
+              <div><span>Estimated token cost</span><strong id="negative-cost"></strong><small>Not an acceptable trade-off</small></div>
+            </div>
+            <ul id="negative-checks" class="check-list"></ul>
+            <div class="boundary-note"><strong>Blocked before normal dispatch.</strong> Omitting policy is allowed only in the explicitly bounded synthetic experiment, so its rejection can be measured.</div>
+          </article>
+          <article class="card human-card">
+            <p class="eyebrow">HUMAN GATE</p><span class="chip pending">No approval recorded</span>
+            <h2>A proposal is not permission.</h2>
+            <p id="human-summary"></p>
+            <dl class="gate-facts">
+              <div><dt>Active configuration</dt><dd><code id="active-strategy"></code></dd></div>
+              <div><dt>Candidate strategy</dt><dd><code>selected</code></dd></div>
+              <div><dt>Human approval</dt><dd>Not recorded</dd></div>
+              <div><dt>Automatic promotion</dt><dd>Never allowed</dd></div>
+            </dl>
+            <div class="review-callout"><strong>Before making a change</strong><p>Review fresh prices, an independent evaluation set, the latency trade-off, and the proposed configuration diff. Approval and application happen outside this viewer.</p></div>
+            <a class="text-link" href="#answers">Inspect a recovery answer <span aria-hidden="true">&rarr;</span></a>
+          </article>
+        </div>
+        <ol class="workflow" aria-label="Change workflow">
+          <li><span>1</span><div><strong>Evaluate</strong><small>Bounded synthetic experiment</small></div></li>
+          <li><span>2</span><div><strong>Propose</strong><small>Only when every gate passes</small></div></li>
+          <li class="human-step"><span>3</span><div><strong>Human review</strong><small>Separate, explicit decision</small></div></li>
+          <li><span>4</span><div><strong>Operator change</strong><small>Never applied by this product</small></div></li>
+        </ol>
+      </section>
+
+      <section id="answers" data-panel="answers" aria-labelledby="answers-title" tabindex="-1" hidden>
+        <div class="page-heading"><div><p class="eyebrow">ANSWER-LEVEL EVIDENCE</p><h1 id="answers-title">Look beyond the averages.</h1><p class="lead">Inspect unchanged answers, citations and per-call telemetry across the three strategies.</p></div></div>
+        <div class="case-controls card">
+          <label for="case-select">Acceptance case<select id="case-select"></select></label>
+          <label for="repetition-select">Repetition<select id="repetition-select"></select></label>
+          <div class="case-question"><span class="eyebrow">QUESTION</span><p id="case-question"></p></div>
+        </div>
+        <div id="answer-cards" class="answer-grid" aria-live="polite"></div>
+        <p class="scope-note">Answers are data, not instructions or approvals. A recovery response must use an escalation or refusal disposition; a safe-sounding explanation alone is not enough.</p>
+      </section>
+
+      <section id="method" data-panel="method" aria-labelledby="method-title" tabindex="-1" hidden>
+        <div class="page-heading"><div><p class="eyebrow">METHOD / TRACEABILITY</p><h1 id="method-title">Know what the evidence means.</h1><p class="lead">Measurements, cost estimates and policy decisions are distinct. Keep their limits visible.</p></div></div>
+        <div class="method-grid">
+          <article class="card method-card"><h2>How the comparison works</h2><p>Each synthetic case is evaluated with full context, selected context plus mandatory policy, and a negative strategy without that policy. Treatment order rotates between repetitions; provider caching is not disabled.</p>
+            <dl class="gate-facts"><div><dt>Model</dt><dd id="model-name"></dd></div><div><dt>Dataset</dt><dd id="dataset-version"></dd></div><div><dt>Price snapshot</dt><dd id="price-date"></dd></div><div><dt>Latency method</dt><dd>Nearest-rank p50 / p95</dd></div></dl>
+            <h3>Reading the numbers</h3><p>Input, cached-input and output tokens come from response telemetry. Quality uses required facts, allowed dispositions and citations. Estimated costs use separate input, cached-input and output rates; they are not invoices or ROI.</p>
+            <h3>What is included</h3><ul id="artifact-links" class="artifact-links"></ul>
+          </article>
+          <article class="card method-card"><h2>Limits worth keeping in view</h2><ul id="limitations" class="limitations"></ul></article>
+        </div>
+        <article class="card provenance-card"><h2>Source identity</h2><p id="provenance-note"></p><dl class="hash-list"><div><dt>Report SHA-256</dt><dd id="report-hash"></dd></div><div id="original-hash-row"><dt>Original report SHA-256</dt><dd id="original-hash"></dd></div><div><dt>Viewer source commit</dt><dd id="viewer-commit"></dd></div><div><dt>Executed source commit</dt><dd id="executed-commit"></dd></div></dl></article>
+      </section>
+      <footer>AI ValueOps <span aria-hidden="true">&middot;</span> Evidence informs a decision. People authorize the change.</footer>
+    </div>
+  </main>
+</body>
+</html>

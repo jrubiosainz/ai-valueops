@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "ai-valueops": {
+      "command": "node",
+      "args": ["/absolute/path/to/ai-valueops/src/context-server.mjs"]
+    }
+  }
+}
